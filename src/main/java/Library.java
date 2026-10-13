@@ -48,4 +48,29 @@ public class Library {
                 .filter(b -> b.getPages() >= minPages)
                 .collect(Collectors.toList());
     }
+
+    public List<Book> getTwoBooksWithinBudget(List<Book> bookList, double budget){
+        List<Book> bestPair = new ArrayList<>();
+        if(bookList == null || bookList.size() < 2) return bestPair;
+
+        double maxPrice = -1;
+        int maxPages = -1;
+
+        for(int i = 0; i < bookList.size() - 1; i++){
+            for(int j = i + 1; j < bookList.size(); j++){
+                Book b1 = bookList.get(i);
+                Book b2 = bookList.get(j);
+
+                double currentPrice = b1.getPrice() + b2.getPrice();
+                int currentPages = b1.getPages() + b2.getPages();
+
+                if(currentPrice <= budget && (currentPrice > maxPrice || (currentPrice == maxPrice && currentPages > maxPages))){
+                    maxPrice = currentPrice;
+                    maxPages = currentPages;
+                    bestPair = List.of(b1, b2);
+                }
+            }
+        }
+        return bestPair;
+    }
 }
