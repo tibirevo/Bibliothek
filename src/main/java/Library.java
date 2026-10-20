@@ -15,38 +15,67 @@ public class Library {
     }
 
     public List<Book> getBooksByAuthor(String author) {
-        return books.stream()
-                .filter(b -> b.getAuthor().equals(author))
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        for(Book b : this.books){
+            if(b.getAuthor().equals(author)){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public double getAveragePageCount(List<Book> bookList) {
-        if (bookList == null || bookList.isEmpty()) return 0.0;
-        return bookList.stream()
-                .mapToInt(Book::getPages)
-                .average()
-                .orElse(0.0);
+        if(bookList == null || bookList.isEmpty()){
+            return 0.0;
+        }
+
+        int sum = 0;
+        for(Book b : bookList){
+            sum += b.getPages();
+        }
+        return (double) sum / bookList.size();
     }
 
     public List<Book> getBooksWithinPriceLimit(List<Book> bookList, double maxPrice) {
-        if (bookList == null) return new ArrayList<>();
-        return bookList.stream()
-                .filter(b -> b.getPrice() <= maxPrice)
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        if(bookList == null){
+            return result;
+        }
+
+        for(Book b : bookList){
+            if(b.getPrice() <= maxPrice){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public Book getMostExpensiveBook(List<Book> bookList) {
-        if (bookList == null) return null;
-        return bookList.stream()
-                .max(Comparator.comparingDouble(Book::getPrice))
-                .orElse(null);
+        if(bookList == null || bookList.isEmpty()){
+            return null;
+        }
+
+        Book mostExpensive = bookList.get(0);
+        for(Book b : bookList){
+            if(b.getPrice() > mostExpensive.getPrice()){
+                mostExpensive = b;
+            }
+        }
+        return mostExpensive;
     }
 
     public List<Book> getBooksWithMinimumPages(List<Book> bookList, int minPages) {
-        if (bookList == null) return new ArrayList<>();
-        return bookList.stream()
-                .filter(b -> b.getPages() >= minPages)
-                .collect(Collectors.toList());
+        List<Book> result = new ArrayList<>();
+        if(bookList == null){
+            return result;
+        }
+
+        for(Book b : bookList){
+            if(b.getPages() >= minPages){
+                result.add(b);
+            }
+        }
+        return result;
     }
 
     public List<Book> getTwoBooksWithinBudget(List<Book> bookList, double budget){
